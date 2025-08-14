@@ -1,12 +1,21 @@
 import React from "react";
+import contactBg from "./assets/bg-contact.avif"; // import image
+import "./App.css";
 
 function Contact() {
   return (
-    <div className="app-container" style={{ padding: "40px" }}>
-      <h1 style={{ color: "#00ffe0" }}>Contact Us</h1>
-      <p>Email: bharathinesan2006@gmail.com</p>
-      <p>Phone: +91 7871812652</p>
-      <p>Address: 123 Event Street, City, Country</p>
+    <div
+      className="page-background"
+      style={{
+        background: `linear-gradient(135deg, rgba(13,13,13,0.8), rgba(26,26,26,0.8)), url(${contactBg}) no-repeat center center`,
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="page-content">
+        <h1>Contact Us</h1>
+        <p>Email: support@eventhub.com</p>
+        <p>Phone: +91 98765 43210</p>
+      </div>
     </div>
   );
 }

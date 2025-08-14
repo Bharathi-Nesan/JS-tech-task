@@ -1,14 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import bgImage from "./assets/bg.jpg"; // Import image
+import "./App.css";
 
 function Home() {
   return (
-    <div className="app-container" style={{ padding: "40px" }}>
-      <h1 style={{ color: "#00ffe0" }}>Welcome to EventHub</h1>
-      <p>Discover upcoming events and stay updated!</p>
-      <Link to="/events" style={{ color: "#fffb00", marginTop: "20px", display: "inline-block" }}>
-        View Events →
-      </Link>
+    <div
+      className="homepage"
+      style={{
+        background: `linear-gradient(135deg, rgba(13,13,13,0.8), rgba(26,26,26,0.8)), url(${bgImage}) no-repeat center center`,
+        backgroundSize: "cover",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#e0e0e0",
+        textAlign: "center",
+      }}
+    >
+      <h1>Welcome to EventHub</h1>
+      <p>Discover and register for amazing events!</p>
     </div>
   );
 }

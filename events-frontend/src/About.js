@@ -1,13 +1,22 @@
 import React from "react";
+import aboutBg from "./assets/bg-about.avif"; // import image
+import "./App.css";
 
 function About() {
   return (
-    <div className="app-container" style={{ padding: "40px" }}>
-      <h1 style={{ color: "#00ffe0" }}>About EventHub</h1>
-      <p>
-        EventHub is your one-stop platform to find and explore events in your city.
-        Stay connected and never miss out on amazing experiences!
-      </p>
+    <div
+      className="page-background"
+      style={{
+        background: `linear-gradient(135deg, rgba(13,13,13,0.8), rgba(26,26,26,0.8)), url(${aboutBg}) no-repeat center center`,
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="page-content">
+        <h1>About EventHub</h1>
+        <p>
+          EventHub is your ultimate platform to discover, register, and manage events seamlessly.
+        </p>
+      </div>
     </div>
   );
 }
