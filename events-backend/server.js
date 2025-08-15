@@ -4,7 +4,6 @@ const cors = require("cors");
 
 // Models
 const Event = require("./models/Event");
-const Registration = require("./models/Registration");
 
 const app = express();
 
@@ -13,25 +12,22 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost/eventsDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(async () => {
-  console.log("✅ Connected to MongoDB");
+mongoose.connect("mongodb://localhost/eventsDB")
+  .then(async () => {
+    console.log("✅ Connected to MongoDB");
 
-  // Seed events if none exist
-  const count = await Event.countDocuments();
-  if (count === 0) {
-    await Event.insertMany([
-      { name: "TechSprint 2025", description: "A 24-hour hackathon", date: "2025-09-15" },
-      { name: "CodeFest 2025", description: "Coding competition", date: "2025-10-01" },
-      { name: "AI Workshop", description: "Hands-on AI workshop", date: "2025-10-20" }
-    ]);
-    console.log("🌱 Seeded default events");
-  }
-})
-.catch(err => console.error(err));
+    // Seed events if none exist
+    const count = await Event.countDocuments();
+    if (count === 0) {
+      await Event.insertMany([
+        { name: "TechSprint 2025", description: "A 24-hour hackathon", date: "2025-09-15" },
+        { name: "CodeFest 2025", description: "Coding competition", date: "2025-10-01" },
+        { name: "AI Workshop", description: "Hands-on AI workshop", date: "2025-10-20" }
+      ]);
+      console.log("🌱 Seeded default events");
+    }
+  })
+  .catch(err => console.error(err));
 
 // ======================
 // Routes
@@ -48,26 +44,23 @@ app.get("/events", async (req, res) => {
 });
 
 // GET single event by ID
-app.get("/events/:id", async (req, res) => {
-  try {
-    const event = await Event.findById(req.params.id);
-    if (!event) return res.status(404).json({ message: "Event not found" });
-    res.json(event);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+// Get single event details
+app.get("/events/:id", (req, res) => {
+  const eventId = req.params.id;
+  const event = events.find(e => e.id === eventId);
+  if (!event) return res.status(404).json({ error: "Event not found" });
+  res.json(event);
 });
 
-// POST create a new event
-app.post("/events", async (req, res) => {
-  try {
-    const event = new Event(req.body);
-    const savedEvent = await event.save();
-    res.status(201).json(savedEvent);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+// Register for an event
+app.post("/events/:id/register", (req, res) => {
+  const { rollNumber } = req.body;
+  const eventId = req.params.id;
+  // Save registration in DB
+  registrations.push({ eventId, rollNumber });
+  res.json({ message: "Registration successful!" });
 });
+
 
 // PUT update an event
 app.put("/events/:id", async (req, res) => {
@@ -89,43 +82,6 @@ app.delete("/events/:id", async (req, res) => {
     const deletedEvent = await Event.findByIdAndDelete(req.params.id);
     if (!deletedEvent) return res.status(404).json({ message: "Event not found" });
     res.json({ message: `Event '${deletedEvent.name}' deleted successfully.` });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// POST register a student for an event
-app.post("/events/:id/register", async (req, res) => {
- const { name, rollNumber, email } = req.body;
-
-if (!name || !rollNumber) {
-  return res.status(400).json({ message: "Student name and roll number are required" });
-}
-
-
-  try {
-    const event = await Event.findById(req.params.id);
-    if (!event) return res.status(404).json({ message: "Event not found" });
-
-    const registration = new Registration({
-      eventId: event._id,
-      studentName,
-      rollNumber,
-      email
-    });
-
-    const savedRegistration = await registration.save();
-    res.status(201).json({ message: "Student registered successfully", registration: savedRegistration });
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// GET all registrations for an event
-app.get("/events/:id/registrations", async (req, res) => {
-  try {
-    const registrations = await Registration.find({ eventId: req.params.id });
-    res.json(registrations);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -4,7 +4,7 @@ import "./App.css";
 import Home from "./Home";
 import About from "./About";
 import Contact from "./Contact";
-import EventDetail from "./EventDetail";
+import EventPage from "./EventPage";
 
 function App() {
   const [events, setEvents] = useState([]);
@@ -60,13 +60,11 @@ function App() {
               </div>
             }
           />
-          <Route path="/event/:id" element={<EventDetail events={events} />} />
+          <Route path="/event/:id" element={<EventPage events={events} />} />
         </Routes>
 
         {/* Footer */}
-        <footer className="footer">
-          © 2025 EventHub. All rights reserved.
-        </footer>
+        <footer className="footer">© 2025 EventHub. All rights reserved.</footer>
       </div>
     </Router>
   );
